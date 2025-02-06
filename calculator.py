@@ -68,11 +68,9 @@ def expressionInput():
 
 def calculation(expList):
     finalval = 0
-    count = 0
-    firstnum = 0
-    firstop = None
-
+    numBool = False
     #use recursion for parentheses statements, then solve the rest of the equation
+   
 
     while len(expList) > 0:
         if len(expList) == 1:
@@ -81,14 +79,20 @@ def calculation(expList):
             print(expList)
             expList.pop()
             print(expList)
+        
 
-        elif expList[0] not in ["+", "-", "/", "x", "*", "(", ")"] and expList[1] not in ["+","/", "x", "*", "(", ")"]:
+        elif expList[0] not in ["+", "-", "/", "x", "*", "(", ")"] and expList[1] not in ["+","/", "x", "*", "(", ")"]: #
+            
+            #in the case where the next two elem in the list do not have a math operator
+            #I.E. [-2, 4] = 2
+
             expList[0] = int(expList[0])
             expList[1] = int(expList[1])
             print(expList[0], expList[1])
             finalval += (expList[0] + expList[1])
             del expList[0 : 2]
             print(expList)
+            numBool = True
 
         elif expList[0] in ["+","/", "x", "*", "(", ")"] and expList[1] not in ["+", "-", "/", "x", "*", "(", ")"]:
             expList[1] = int(expList[1])
@@ -106,7 +110,13 @@ def calculation(expList):
             
             del expList[0 : 2]
             print(expList)
-
+            numBool = True
+        
+        if numBool == False:
+            expList[0] = int(expList[0])
+            finalval += expList[0]
+            expList.pop(0)
+            numBool = True
         
         
         
