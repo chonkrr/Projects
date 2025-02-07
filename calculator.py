@@ -3,6 +3,7 @@ import math
 
 def main():
     exp = expressionInput()
+    #sortExp = PEMDASsort(exp)
     ans = calculation(exp)
     while True:
         
@@ -24,6 +25,7 @@ def expressionInput():
     mathlist = []
     mathexp = input("Please input your mathematical expression: ")
     val = True
+    paranBool = False
     
     for i, elem in enumerate(mathexp):
         elem = elem.lower()
@@ -46,8 +48,15 @@ def expressionInput():
             print("Invalid character detected. Please enter a new expression.")
             return expressionInput()
         
-
-        #if block to sort a subtraction expression into negative number, I.E [4,-,2] becomes [4,-2]
+        if elem == "(" or paranBool:
+            paranBool = True 
+            temp += elem
+            if elem == ")":
+                paranBool = False
+                mathlist.append(temp)
+                temp = ""
+            continue
+        #if block to sort a subtraction expression into negative number, I.E "4 - 2" becomes [4,-2]
         if elem == "-":
             if temp:
                 mathlist.append(temp)  # Append previous number
@@ -55,7 +64,8 @@ def expressionInput():
         elif elem.isdigit():
             temp += elem
         else:
-            if temp:
+            
+            if temp and not paranBool:
                 mathlist.append(temp)
                 temp = ""
             mathlist.append(elem)
@@ -81,6 +91,9 @@ def calculation(toBeCalculated):
    
 
     while len(toBeCalculated) > 0:
+
+        #if the list is 1 elem long, it is the final value, add it to the finalval and return the answer
+        
         if len(toBeCalculated) == 1:
             toBeCalculated[0] = int(toBeCalculated[0])
             finalval += toBeCalculated[0]
